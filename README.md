@@ -1,30 +1,31 @@
 # WebSocket Low-Code Platform
 
-A modern, scalable real-time notification platform built with Spring Boot and WebSocket technology, designed for low-code/no-code development environments.
+A modern, scalable real-time progress tracking platform built with Spring Boot and WebSocket technology, designed for low-code/no-code development environments with advanced architecture generation capabilities.
 
 ## 🚀 Overview
 
-This platform provides a robust foundation for real-time communication between backend services and frontend applications. It's specifically designed to support low-code development workflows by offering standardized APIs and WebSocket endpoints for real-time notifications.
+This platform provides a robust foundation for real-time progress tracking and architecture generation workflows. It's specifically designed to support low-code development environments by offering standardized WebSocket APIs for real-time progress updates and asynchronous operation management.
 
 ## 🏗️ Architecture
 
 ### Backend (Spring Boot)
-- **WebSocket Server**: Real-time bidirectional communication
-- **REST API**: Standardized endpoints for operation management
-- **Process Simulator**: Demonstrates multi-step operation workflows
-- **Notification Service**: Centralized message broadcasting system
+- **WebSocket Server**: Real-time bidirectional communication with progress tracking
+- **Progress Service**: Centralized progress update broadcasting system
+- **Architecture Generation Service**: Asynchronous architecture generation with real-time progress
+- **Message Broker**: STOMP-based message routing with topic and queue support
 
 ### Frontend (React + PrimeReact)
-- **Real-time UI**: Live updates via WebSocket connections
+- **Real-time Progress UI**: Live progress updates via WebSocket connections
 - **Modern Interface**: Built with PrimeReact components
-- **Operation Management**: Trigger and monitor long-running processes
+- **Operation Management**: Trigger and monitor long-running architecture generation
 
 ## 🛠️ Technology Stack
 
 ### Backend
 - **Java 17** - Modern Java with enhanced performance
 - **Spring Boot 3.2.0** - Enterprise-grade application framework
-- **Spring WebSocket** - Real-time communication support
+- **Spring WebSocket + STOMP** - Advanced real-time communication
+- **Spring Messaging** - Message broker and routing
 - **Maven** - Dependency management and build automation
 
 ### Frontend
@@ -35,23 +36,25 @@ This platform provides a robust foundation for real-time communication between b
 
 ## 📋 Features
 
-### Real-Time Communication
-- ✅ WebSocket-based real-time notifications
-- ✅ Bidirectional communication support
+### Real-Time Progress Tracking
+- ✅ WebSocket-based real-time progress updates
+- ✅ User-specific progress queues (`/queue/progress`)
+- ✅ System-wide broadcast topics (`/topic/system`)
+- ✅ STOMP protocol with SockJS fallback
 - ✅ Automatic reconnection handling
-- ✅ Message broadcasting to multiple clients
 
-### Operation Management
-- ✅ Multi-step process simulation
-- ✅ Progress tracking and status updates
-- ✅ Configurable operation workflows
-- ✅ Error handling and recovery
+### Architecture Generation
+- ✅ Asynchronous architecture generation workflows
+- ✅ Multi-step progress tracking (started, progress, completed, error)
+- ✅ Real-time progress percentage updates
+- ✅ Comprehensive error handling and recovery
+- ✅ Configurable generation steps and timing
 
 ### Developer Experience
-- ✅ Comprehensive test coverage (66 tests)
-- ✅ RESTful API design
+- ✅ Comprehensive test coverage (41 tests)
+- ✅ Modular service architecture
 - ✅ Detailed logging and monitoring
-- ✅ Modular architecture
+- ✅ Type-safe progress update models
 
 ## 🔧 Quick Start
 
@@ -82,25 +85,39 @@ The frontend application will start on `http://localhost:3000`
 ### WebSocket Connection
 ```
 Endpoint: ws://localhost:8080/ws
-Topic: /topic/notifications
+Protocol: STOMP over SockJS
 ```
 
-### REST API Endpoints
+### WebSocket Destinations
 
-#### Start Operation
-```http
-POST /api/operations/start
-Content-Type: application/json
-
-{}
+#### User-Specific Progress Updates
+```
+Destination: /user/{userId}/queue/progress
+Type: User-specific progress updates
 ```
 
-#### WebSocket Message Format
+#### System Broadcast
+```
+Destination: /topic/system
+Type: System-wide notifications
+```
+
+#### Application Messages
+```
+Destination: /app/subscribe
+Type: Client subscription messages
+```
+
+### Progress Update Message Format
 ```json
 {
-  "step": "STARTED|PROCESSING|DONE",
-  "message": "Operation status message",
-  "timestamp": 1752337875095
+  "operationId": "op-123",
+  "userId": "user-456",
+  "type": "GENERATION_STARTED|GENERATION_PROGRESS|GENERATION_COMPLETED|GENERATION_ERROR|VALIDATION_PROGRESS|DEPLOYMENT_PROGRESS",
+  "percentage": 75,
+  "step": "step_3",
+  "message": "Processing architecture components...",
+  "timestamp": "2024-01-15T10:30:00"
 }
 ```
 
@@ -113,9 +130,20 @@ mvn test
 ```
 
 **Test Coverage:**
-- Unit Tests: 66 tests
-- Integration Tests: WebSocket and REST API
-- Component Tests: Service layer and controllers
+- Unit Tests: 41 tests
+- Integration Tests: WebSocket configuration and services
+- Component Tests: Progress services and controllers
+
+### Test Results
+```
+✅ ProgressTypeTest - 6 tests passed
+✅ ProgressUpdateTest - 6 tests passed
+✅ WebSocketProgressServiceTest - 8 tests passed
+✅ ArchitectureGenerationServiceTest - 6 tests passed
+✅ ProgressControllerTest - 3 tests passed
+✅ WebSocketIntegrationTest - 11 tests passed
+✅ BackendApplicationTests - 1 test passed
+```
 
 ### Frontend Tests
 ```bash
@@ -129,26 +157,24 @@ npm test
 websocket-lowcode-platform-main/
 ├── backend/
 │   ├── src/main/java/com/hicham/backend/
-│   │   ├── BackendApplication.java          # Main application
+│   │   ├── BackendApplication.java              # Main application
 │   │   ├── config/
-│   │   │   └── WebSocketConfig.java        # WebSocket configuration
+│   │   │   └── WebSocketConfig.java            # WebSocket + STOMP configuration
 │   │   ├── controller/
-│   │   │   └── NotificationController.java # REST API endpoints
+│   │   │   └── ProgressController.java         # WebSocket message handling
 │   │   ├── service/
-│   │   │   └── NotificationService.java    # Notification logic
-│   │   ├── simulator/
-│   │   │   └── FakeProcessSimulator.java   # Process simulation
-│   │   ├── model/
-│   │   │   └── OperationStatus.java        # Data models
-│   │   └── dto/
-│   │       └── NotificationPayload.java    # Data transfer objects
-│   ├── src/test/                           # Comprehensive test suite
+│   │   │   ├── WebSocketProgressService.java   # Progress update service
+│   │   │   └── ArchitectureGenerationService.java # Architecture generation
+│   │   └── model/
+│   │       ├── ProgressUpdate.java             # Progress update model
+│   │       └── ProgressType.java               # Progress type enum
+│   ├── src/test/                               # Comprehensive test suite
 │   └── pom.xml
 ├── frontend/
 │   ├── src/
-│   │   ├── components/                     # React components
-│   │   ├── services/                       # WebSocket and API services
-│   │   └── utils/                          # Utility functions
+│   │   ├── components/                         # React components
+│   │   ├── services/                           # WebSocket and API services
+│   │   └── utils/                              # Utility functions
 │   ├── public/
 │   └── package.json
 └── README.md
@@ -157,30 +183,42 @@ websocket-lowcode-platform-main/
 ## 🎯 Business Value
 
 ### For Low-Code/No-Code Platforms
-- **Standardized Integration**: Pre-built WebSocket and REST APIs
-- **Real-Time Capabilities**: Live updates without polling
-- **Scalable Architecture**: Supports multiple concurrent users
-- **Developer Productivity**: Ready-to-use components and services
+- **Real-Time Progress Tracking**: Live updates for long-running operations
+- **Architecture Generation**: Automated architecture creation workflows
+- **Standardized Integration**: Pre-built WebSocket progress APIs
+- **Scalable Architecture**: Supports multiple concurrent users and operations
 
 ### For Enterprise Applications
-- **Reliable Communication**: Robust error handling and reconnection
+- **Reliable Progress Communication**: Robust error handling and reconnection
+- **Asynchronous Processing**: Non-blocking architecture generation
 - **Security Ready**: Framework supports authentication and authorization
-- **Monitoring**: Comprehensive logging and metrics
+- **Monitoring**: Comprehensive logging and progress metrics
 - **Maintainable Code**: Clean architecture and comprehensive testing
 
 ## 🔒 Security Considerations
 
-- WebSocket connections support authentication
-- REST API endpoints can be secured with Spring Security
+- WebSocket connections support authentication via Principal
+- User-specific progress queues for data isolation
 - CORS configuration for cross-origin requests
 - Input validation and sanitization
+- Secure message routing with STOMP
 
 ## 📈 Performance
 
-- **WebSocket**: Low-latency real-time communication
+- **WebSocket + STOMP**: Low-latency real-time communication
 - **Spring Boot**: Optimized for high-throughput applications
+- **Async Processing**: Non-blocking architecture generation with CompletableFuture
+- **Message Broker**: Efficient topic and queue-based message routing
 - **Connection Pooling**: Efficient resource management
-- **Async Processing**: Non-blocking operation execution
+
+## 🚀 Progress Types Supported
+
+- **GENERATION_STARTED**: Operation initialization
+- **GENERATION_PROGRESS**: Step-by-step progress updates
+- **GENERATION_COMPLETED**: Successful completion
+- **GENERATION_ERROR**: Error handling and reporting
+- **VALIDATION_PROGRESS**: Validation step progress
+- **DEPLOYMENT_PROGRESS**: Deployment step progress
 
 ## 🤝 Contributing
 
@@ -200,8 +238,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 For technical support or questions:
 - Create an issue in the repository
 - Review the test documentation
-- Check the API documentation
+- Check the WebSocket API documentation
 
 ---
 
-**Built with ❤️ for modern web applications** 
+**Built with ❤️ for modern real-time applications** 
