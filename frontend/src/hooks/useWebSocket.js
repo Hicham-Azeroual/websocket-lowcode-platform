@@ -1,57 +1,57 @@
-import { useEffect, useState, useRef } from "react";
-import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
-import { toast } from "react-toastify";
+import { useEffect, useState, useRef } from 'react';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
+// Custom hook for WebSocket connection
 export const useWebSocket = (userId) => {
   const [isConnected, setIsConnected] = useState(false);
   const [progressUpdates, setProgressUpdates] = useState([]);
-  const [error, setError] = useState(null);
   const clientRef = useRef(null);
 
   useEffect(() => {
-    const socket = new SockJS("http://localhost:8080/ws");
+    // Connect to backend WebSocket endpoint
+    const socket = new SockJS('http://localhost:8080/ws');
     const client = new Client({
       webSocketFactory: () => socket,
-      reconnectDelay: 5000,
+      reconnectDelay: 5000, // Reconnect after 5 seconds
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
 
     client.onConnect = () => {
       setIsConnected(true);
-      setError(null);
-      console.log(`Connected and subscribed to /user/${userId}/progress`);
-      client.subscribe(`/user/${userId}/progress`, (message) => {
-        const update = JSON.parse(message.body);
-        console.log("Received update:", update);
-        setProgressUpdates((prev) => [...prev, update]);
-        toast.info(`Progress: ${update.message}`);
-      });
-      client.subscribe("/topic/system", (message) => {
-        const update = JSON.parse(message.body);
-        toast.info(`System Update: ${update.message}`);
-      });
-    };
+      clientRef.current = client;
 
-    client.onStompError = (frame) => {
-      setError("WebSocket connection error");
-      toast.error("WebSocket connection error");
-    };
+      // Subscribe to private user-specific updates
+      client.subscribe(`/topic/progress.${userId}`, (message) => {
+        const update = JSON.parse(message.body);
+        console.log(update);
+        
+        setProgressUpdates((prev) => [...prev, { ...update, isPublic: false }]);
+      });
 
-    client.onWebSocketError = (event) => {
-      setError("Network connection error");
-      toast.error("Network connection error");
+      // Subscribe to public system-wide updates
+      client.subscribe('/topic/system', (message) => {
+        const update = JSON.parse(message.body);
+        setProgressUpdates((prev) => [...prev, { ...update, isPublic: true }]);
+      });
+
+      // Send subscription message with userId
+      client.publish({ destination: '/app/subscribe', body: userId });
     };
 
     client.onDisconnect = () => {
       setIsConnected(false);
-      setError("Disconnected from WebSocket");
+    };
+
+    client.onStompError = (frame) => {
+      console.error('STOMP error:', frame);
+      setIsConnected(false);
     };
 
     client.activate();
-    clientRef.current = client;
 
+    // Cleanup on unmount
     return () => {
       if (clientRef.current) {
         clientRef.current.deactivate();
@@ -59,10 +59,9 @@ export const useWebSocket = (userId) => {
     };
   }, [userId]);
 
-  return {
-    isConnected,
-    progressUpdates,
-    error,
-    clearProgressUpdates: () => setProgressUpdates([]),
+  const clearProgressUpdates = () => {
+    setProgressUpdates([]);
   };
+
+  return { isConnected, progressUpdates, clearProgressUpdates };
 };
