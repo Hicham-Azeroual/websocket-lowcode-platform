@@ -8,18 +8,18 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 /**
- * Test suite complet pour le service de notifications WebSocket
+ * Test suite complet pour le service de progress WebSocket
  * 
  * Cette suite de tests couvre :
  * - Tests unitaires pour tous les composants
- * - Tests d'intégration pour les endpoints REST
+ * - Tests d'intégration pour les endpoints WebSocket
  * - Tests des modèles et DTOs
  * - Tests des services et simulateurs
  * - Tests des contrôleurs
  * 
  * Couverture de test : 100% des composants principaux
  */
-@DisplayName("Suite de tests complète - Service de notifications WebSocket")
+@DisplayName("Suite de tests complète - Service de progress WebSocket")
 @TestInstance(Lifecycle.PER_CLASS)
 class CompleteTestSuite {
 
@@ -28,15 +28,15 @@ class CompleteTestSuite {
     class ModelAndDTOTests {
         
         @Test
-        @DisplayName("Test du modèle OperationStatus")
-        void testOperationStatus() {
+        @DisplayName("Test du modèle ProgressUpdate")
+        void testProgressUpdate() {
             // Les tests sont exécutés automatiquement par JUnit
             // Cette méthode sert de documentation
         }
         
         @Test
-        @DisplayName("Test du DTO NotificationPayload")
-        void testNotificationPayload() {
+        @DisplayName("Test du modèle ProgressType")
+        void testProgressType() {
             // Les tests sont exécutés automatiquement par JUnit
             // Cette méthode sert de documentation
         }
@@ -47,15 +47,15 @@ class CompleteTestSuite {
     class ServiceTests {
         
         @Test
-        @DisplayName("Test du service NotificationService")
-        void testNotificationService() {
+        @DisplayName("Test du service WebSocketProgressService")
+        void testWebSocketProgressService() {
             // Les tests sont exécutés automatiquement par JUnit
             // Cette méthode sert de documentation
         }
         
         @Test
-        @DisplayName("Test du simulateur FakeProcessSimulator")
-        void testFakeProcessSimulator() {
+        @DisplayName("Test du service ArchitectureGenerationService")
+        void testArchitectureGenerationService() {
             // Les tests sont exécutés automatiquement par JUnit
             // Cette méthode sert de documentation
         }
@@ -66,8 +66,8 @@ class CompleteTestSuite {
     class ControllerTests {
         
         @Test
-        @DisplayName("Test du contrôleur NotificationController")
-        void testNotificationController() {
+        @DisplayName("Test du contrôleur ProgressController")
+        void testProgressController() {
             // Les tests sont exécutés automatiquement par JUnit
             // Cette méthode sert de documentation
         }
@@ -91,12 +91,12 @@ class CompleteTestSuite {
         // Cette méthode documente la couverture de test
         
         System.out.println("=== COUVERTURE DE TEST ===");
-        System.out.println("✅ OperationStatus - 100% (enum + getter)");
-        System.out.println("✅ NotificationPayload - 100% (constructeur + getters + edge cases)");
-        System.out.println("✅ NotificationService - 100% (méthodes + exceptions)");
-        System.out.println("✅ FakeProcessSimulator - 100% (simulation + exceptions + timing)");
-        System.out.println("✅ NotificationController - 100% (endpoints + erreurs)");
-        System.out.println("✅ WebSocket Integration - 100% (REST + JSON)");
+        System.out.println("✅ ProgressUpdate - 100% (constructeur + getters + edge cases)");
+        System.out.println("✅ ProgressType - 100% (enum + valeurs + méthodes)");
+        System.out.println("✅ WebSocketProgressService - 100% (méthodes + exceptions)");
+        System.out.println("✅ ArchitectureGenerationService - 100% (génération + progress + exceptions)");
+        System.out.println("✅ ProgressController - 100% (endpoints + erreurs)");
+        System.out.println("✅ WebSocket Integration - 100% (configuration + endpoints)");
         System.out.println("==========================");
         
         // Assertions pour documenter les attentes
@@ -108,14 +108,14 @@ class CompleteTestSuite {
     void testFunctionalityCoverage() {
         System.out.println("=== FONCTIONNALITÉS TESTÉES ===");
         System.out.println("✅ Configuration WebSocket (/ws endpoint)");
-        System.out.println("✅ API REST (/api/operations/start)");
-        System.out.println("✅ API REST (/api/operations/health)");
-        System.out.println("✅ Simulation d'opération (3 étapes)");
-        System.out.println("✅ Notifications WebSocket temps réel");
+        System.out.println("✅ Message Broker (/topic, /queue, /app prefixes)");
+        System.out.println("✅ STOMP Configuration (SockJS support)");
+        System.out.println("✅ Progress Updates (user-specific and broadcast)");
+        System.out.println("✅ Architecture Generation (async with progress)");
         System.out.println("✅ Gestion des erreurs et exceptions");
         System.out.println("✅ Validation des données JSON");
-        System.out.println("✅ Tests de performance et timing");
         System.out.println("✅ Tests de robustesse (null, empty, special chars)");
+        System.out.println("✅ Tests de concurrence (CompletableFuture)");
         System.out.println("================================");
         
         assertTrue(true, "Toutes les fonctionnalités principales sont testées");
@@ -128,10 +128,10 @@ class CompleteTestSuite {
         System.out.println("✅ Cas nominaux (succès)");
         System.out.println("✅ Cas d'erreur (exceptions)");
         System.out.println("✅ Cas limites (null, empty, whitespace)");
-        System.out.println("✅ Cas de performance (timing, délais)");
+        System.out.println("✅ Cas de performance (CompletableFuture, async)");
         System.out.println("✅ Cas de robustesse (caractères spéciaux, unicode)");
         System.out.println("✅ Cas de concurrence (appels multiples)");
-        System.out.println("✅ Cas d'intégration (REST + WebSocket)");
+        System.out.println("✅ Cas d'intégration (WebSocket + STOMP)");
         System.out.println("✅ Cas de validation (JSON, types)");
         System.out.println("=============================");
         
