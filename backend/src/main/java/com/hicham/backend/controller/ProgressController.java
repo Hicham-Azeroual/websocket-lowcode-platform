@@ -9,12 +9,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class ProgressController {
-    private final WebSocketProgressService progressService;
 
-    @Autowired
-    public ProgressController(WebSocketProgressService progressService) {
-        this.progressService = progressService;
-    }
 
     // Handle subscription requests with userId
     @MessageMapping("/subscribe")
