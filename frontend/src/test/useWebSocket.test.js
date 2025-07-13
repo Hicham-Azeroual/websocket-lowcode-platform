@@ -3,7 +3,7 @@
 import { renderHook, act } from "@testing-library/react";
 import { useWebSocket } from "../hooks/useWebSocket";
 
-// Mock SockJS and StompJS for testing -
+// Mock SockJS and StompJS for testing 
 jest.mock("sockjs-client", () => ({
   __esModule: true,
   default: jest.fn(() => ({})),
