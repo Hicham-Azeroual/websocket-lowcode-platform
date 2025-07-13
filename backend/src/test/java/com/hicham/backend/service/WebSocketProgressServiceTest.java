@@ -1,5 +1,7 @@
 package com.hicham.backend.service;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,10 +15,8 @@ import static org.mockito.Mockito.verify;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import com.hicham.backend.model.ProgressUpdate;
 import com.hicham.backend.model.ProgressType;
-
-import java.time.LocalDateTime;
+import com.hicham.backend.model.ProgressUpdate;
 
 @ExtendWith(MockitoExtension.class)
 class WebSocketProgressServiceTest {
@@ -44,9 +44,8 @@ class WebSocketProgressServiceTest {
         progressService.sendProgressUpdate(userId, update);
 
         // Then
-        verify(messagingTemplate, times(1)).convertAndSendToUser(
-            eq(userId),
-            eq("/queue/progress"),
+        verify(messagingTemplate, times(1)).convertAndSend(
+            eq("/topic/progress." + userId),
             eq(update)
         );
     }
@@ -85,9 +84,8 @@ class WebSocketProgressServiceTest {
         }
 
         // Then
-        verify(messagingTemplate, times(types.length)).convertAndSendToUser(
-            eq(userId),
-            eq("/queue/progress"),
+        verify(messagingTemplate, times(types.length)).convertAndSend(
+            eq("/topic/progress." + userId),
             any(ProgressUpdate.class)
         );
     }
@@ -102,16 +100,15 @@ class WebSocketProgressServiceTest {
         );
         
         doThrow(new RuntimeException("Messaging error"))
-            .when(messagingTemplate).convertAndSendToUser(eq(userId), eq("/queue/progress"), any(ProgressUpdate.class));
+            .when(messagingTemplate).convertAndSend(eq("/topic/progress." + userId), any(ProgressUpdate.class));
 
         // When & Then
         assertThrows(RuntimeException.class, () -> {
             progressService.sendProgressUpdate(userId, update);
         });
         
-        verify(messagingTemplate, times(1)).convertAndSendToUser(
-            eq(userId),
-            eq("/queue/progress"),
+        verify(messagingTemplate, times(1)).convertAndSend(
+            eq("/topic/progress." + userId),
             eq(update)
         );
     }
@@ -151,9 +148,8 @@ class WebSocketProgressServiceTest {
         progressService.sendProgressUpdate(userId, update);
 
         // Then
-        verify(messagingTemplate, times(1)).convertAndSendToUser(
-            eq(userId),
-            eq("/queue/progress"),
+        verify(messagingTemplate, times(1)).convertAndSend(
+            eq("/topic/progress.null"),
             eq(update)
         );
     }
@@ -171,9 +167,8 @@ class WebSocketProgressServiceTest {
         progressService.sendProgressUpdate(userId, update);
 
         // Then
-        verify(messagingTemplate, times(1)).convertAndSendToUser(
-            eq(userId),
-            eq("/queue/progress"),
+        verify(messagingTemplate, times(1)).convertAndSend(
+            eq("/topic/progress."),
             eq(update)
         );
     }
@@ -191,9 +186,8 @@ class WebSocketProgressServiceTest {
         progressService.sendProgressUpdate(userId, update);
 
         // Then
-        verify(messagingTemplate, times(1)).convertAndSendToUser(
-            eq(userId),
-            eq("/queue/progress"),
+        verify(messagingTemplate, times(1)).convertAndSend(
+            eq("/topic/progress." + userId),
             eq(update)
         );
     }

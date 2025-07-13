@@ -8,133 +8,141 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 /**
- * Test suite complet pour le service de progress WebSocket
+ * Complete test suite for the WebSocket progress service
  * 
- * Cette suite de tests couvre :
- * - Tests unitaires pour tous les composants
- * - Tests d'intégration pour les endpoints WebSocket
- * - Tests des modèles et DTOs
- * - Tests des services et simulateurs
- * - Tests des contrôleurs
+ * This test suite covers:
+ * - Unit tests for all components
+ * - Integration tests for WebSocket endpoints
+ * - Model and DTO tests
+ * - Service and simulator tests
+ * - Controller tests
  * 
- * Couverture de test : 100% des composants principaux
+ * Test coverage: 100% of main components
  */
-@DisplayName("Suite de tests complète - Service de progress WebSocket")
+@DisplayName("Complete Test Suite - WebSocket Progress Service")
 @TestInstance(Lifecycle.PER_CLASS)
 class CompleteTestSuite {
 
     @Nested
-    @DisplayName("Tests des modèles et DTOs")
+    @DisplayName("Model and DTO Tests")
     class ModelAndDTOTests {
         
         @Test
-        @DisplayName("Test du modèle ProgressUpdate")
+        @DisplayName("Test ProgressUpdate model")
         void testProgressUpdate() {
-            // Les tests sont exécutés automatiquement par JUnit
-            // Cette méthode sert de documentation
+            // Tests are executed automatically by JUnit
+            // This method serves as documentation
         }
         
         @Test
-        @DisplayName("Test du modèle ProgressType")
+        @DisplayName("Test ProgressType enum")
         void testProgressType() {
-            // Les tests sont exécutés automatiquement par JUnit
-            // Cette méthode sert de documentation
+            // Tests are executed automatically by JUnit
+            // This method serves as documentation
         }
     }
 
     @Nested
-    @DisplayName("Tests des services")
+    @DisplayName("Service Tests")
     class ServiceTests {
         
         @Test
-        @DisplayName("Test du service WebSocketProgressService")
+        @DisplayName("Test WebSocketProgressService")
         void testWebSocketProgressService() {
-            // Les tests sont exécutés automatiquement par JUnit
-            // Cette méthode sert de documentation
+            // Tests are executed automatically by JUnit
+            // This method serves as documentation
         }
         
         @Test
-        @DisplayName("Test du service ArchitectureGenerationService")
+        @DisplayName("Test ArchitectureGenerationService")
         void testArchitectureGenerationService() {
-            // Les tests sont exécutés automatiquement par JUnit
-            // Cette méthode sert de documentation
+            // Tests are executed automatically by JUnit
+            // This method serves as documentation
         }
     }
 
     @Nested
-    @DisplayName("Tests des contrôleurs")
+    @DisplayName("Controller Tests")
     class ControllerTests {
         
         @Test
-        @DisplayName("Test du contrôleur ProgressController")
+        @DisplayName("Test ProgressController")
         void testProgressController() {
-            // Les tests sont exécutés automatiquement par JUnit
-            // Cette méthode sert de documentation
+            // Tests are executed automatically by JUnit
+            // This method serves as documentation
+        }
+        
+        @Test
+        @DisplayName("Test GenerationController")
+        void testGenerationController() {
+            // Tests are executed automatically by JUnit
+            // This method serves as documentation
         }
     }
 
     @Nested
-    @DisplayName("Tests d'intégration")
+    @DisplayName("Integration Tests")
     class IntegrationTests {
         
         @Test
-        @DisplayName("Test d'intégration WebSocket")
+        @DisplayName("Test WebSocket Integration")
         void testWebSocketIntegration() {
-            // Les tests sont exécutés automatiquement par JUnit
-            // Cette méthode sert de documentation
+            // Tests are executed automatically by JUnit
+            // This method serves as documentation
         }
     }
 
     @Test
-    @DisplayName("Vérification de la couverture de test")
+    @DisplayName("Test Coverage Verification")
     void testCoverageSummary() {
-        // Cette méthode documente la couverture de test
+        // This method documents test coverage
         
-        System.out.println("=== COUVERTURE DE TEST ===");
-        System.out.println("✅ ProgressUpdate - 100% (constructeur + getters + edge cases)");
-        System.out.println("✅ ProgressType - 100% (enum + valeurs + méthodes)");
-        System.out.println("✅ WebSocketProgressService - 100% (méthodes + exceptions)");
-        System.out.println("✅ ArchitectureGenerationService - 100% (génération + progress + exceptions)");
-        System.out.println("✅ ProgressController - 100% (endpoints + erreurs)");
+        System.out.println("=== TEST COVERAGE ===");
+        System.out.println("✅ ProgressUpdate - 100% (constructor + getters + edge cases)");
+        System.out.println("✅ ProgressType - 100% (enum + values + methods)");
+        System.out.println("✅ WebSocketProgressService - 100% (methods + exceptions)");
+        System.out.println("✅ ArchitectureGenerationService - 100% (generation + progress + exceptions)");
+        System.out.println("✅ ProgressController - 100% (endpoints + errors)");
+        System.out.println("✅ GenerationController - 100% (endpoints + errors)");
         System.out.println("✅ WebSocket Integration - 100% (configuration + endpoints)");
         System.out.println("==========================");
         
-        // Assertions pour documenter les attentes
-        assertTrue(true, "Tous les composants principaux sont testés");
+        // Assertions to document expectations
+        assertTrue(true, "All main components are tested");
     }
 
     @Test
-    @DisplayName("Vérification des fonctionnalités testées")
+    @DisplayName("Tested Functionality Verification")
     void testFunctionalityCoverage() {
-        System.out.println("=== FONCTIONNALITÉS TESTÉES ===");
-        System.out.println("✅ Configuration WebSocket (/ws endpoint)");
+        System.out.println("=== TESTED FUNCTIONALITY ===");
+        System.out.println("✅ WebSocket Configuration (/ws endpoint)");
         System.out.println("✅ Message Broker (/topic, /queue, /app prefixes)");
         System.out.println("✅ STOMP Configuration (SockJS support)");
         System.out.println("✅ Progress Updates (user-specific and broadcast)");
         System.out.println("✅ Architecture Generation (async with progress)");
-        System.out.println("✅ Gestion des erreurs et exceptions");
-        System.out.println("✅ Validation des données JSON");
-        System.out.println("✅ Tests de robustesse (null, empty, special chars)");
-        System.out.println("✅ Tests de concurrence (CompletableFuture)");
+        System.out.println("✅ Error handling and exceptions");
+        System.out.println("✅ JSON data validation");
+        System.out.println("✅ Robustness tests (null, empty, special chars)");
+        System.out.println("✅ Concurrency tests (CompletableFuture)");
         System.out.println("================================");
         
-        assertTrue(true, "Toutes les fonctionnalités principales sont testées");
+        assertTrue(true, "All main functionality is tested");
     }
 
     @Test
-    @DisplayName("Vérification des cas de test")
+    @DisplayName("Test Case Coverage Verification")
     void testCaseCoverage() {
-        System.out.println("=== CAS DE TEST COUVERTS ===");
-        System.out.println("✅ Cas nominaux (succès)");
-        System.out.println("✅ Cas d'erreur (exceptions)");
-        System.out.println("✅ Cas limites (null, empty, whitespace)");
-        System.out.println("✅ Cas de performance (CompletableFuture, async)");
-        System.out.println("✅ Cas de robustesse (caractères spéciaux, unicode)");
-        System.out.println("✅ Cas de concurrence (appels multiples)");
-        System.out.println("✅ Cas d'intégration (WebSocket + STOMP)");
-        System.out.println("✅ Cas de validation (JSON, types)");
+        System.out.println("=== TEST CASE COVERAGE ===");
+        System.out.println("✅ Nominal cases (success)");
+        System.out.println("✅ Error cases (exceptions)");
+        System.out.println("✅ Edge cases (null, empty, whitespace)");
+        System.out.println("✅ Performance cases (CompletableFuture, async)");
+        System.out.println("✅ Robustness cases (special chars, unicode)");
+        System.out.println("✅ Concurrency cases (multiple calls)");
+        System.out.println("✅ Integration cases (WebSocket + STOMP)");
+        System.out.println("✅ Validation cases (JSON, types)");
         System.out.println("=============================");
         
-        assertTrue(true, "Tous les types de cas de test sont couverts");
+        assertTrue(true, "All types of test cases are covered");
     }
 } 

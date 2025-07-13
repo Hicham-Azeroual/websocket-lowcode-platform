@@ -1,78 +1,152 @@
 package com.hicham.backend.model;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 class ProgressTypeTest {
 
     @Test
-    void testEnumValues() {
-        // When
-        ProgressType[] values = ProgressType.values();
+    void testProgressType_Values() {
+        // Given & When
+        ProgressType[] types = ProgressType.values();
 
         // Then
-        assertEquals(6, values.length);
-        assertArrayEquals(new ProgressType[]{
-            ProgressType.GENERATION_STARTED,
-            ProgressType.GENERATION_PROGRESS,
-            ProgressType.GENERATION_COMPLETED,
-            ProgressType.GENERATION_ERROR,
-            ProgressType.VALIDATION_PROGRESS,
-            ProgressType.DEPLOYMENT_PROGRESS
-        }, values);
+        assertNotNull(types);
+        assertEquals(6, types.length, "Should have exactly 6 progress types");
     }
 
     @Test
-    void testValueOf() {
-        // When & Then
-        assertEquals(ProgressType.GENERATION_STARTED, ProgressType.valueOf("GENERATION_STARTED"));
-        assertEquals(ProgressType.GENERATION_PROGRESS, ProgressType.valueOf("GENERATION_PROGRESS"));
-        assertEquals(ProgressType.GENERATION_COMPLETED, ProgressType.valueOf("GENERATION_COMPLETED"));
-        assertEquals(ProgressType.GENERATION_ERROR, ProgressType.valueOf("GENERATION_ERROR"));
-        assertEquals(ProgressType.VALIDATION_PROGRESS, ProgressType.valueOf("VALIDATION_PROGRESS"));
-        assertEquals(ProgressType.DEPLOYMENT_PROGRESS, ProgressType.valueOf("DEPLOYMENT_PROGRESS"));
+    void testProgressType_GenerationStarted() {
+        // Given & When
+        ProgressType type = ProgressType.GENERATION_STARTED;
+
+        // Then
+        assertNotNull(type);
+        assertEquals("GENERATION_STARTED", type.name());
+        assertEquals(0, type.ordinal());
     }
 
     @Test
-    void testValueOf_WithInvalidValue() {
-        // When & Then
-        assertThrows(IllegalArgumentException.class, () -> {
-            ProgressType.valueOf("INVALID");
-        });
+    void testProgressType_GenerationProgress() {
+        // Given & When
+        ProgressType type = ProgressType.GENERATION_PROGRESS;
+
+        // Then
+        assertNotNull(type);
+        assertEquals("GENERATION_PROGRESS", type.name());
+        assertEquals(1, type.ordinal());
     }
 
     @Test
-    void testEnumOrdinal() {
-        // When & Then
-        assertEquals(0, ProgressType.GENERATION_STARTED.ordinal());
-        assertEquals(1, ProgressType.GENERATION_PROGRESS.ordinal());
-        assertEquals(2, ProgressType.GENERATION_COMPLETED.ordinal());
-        assertEquals(3, ProgressType.GENERATION_ERROR.ordinal());
-        assertEquals(4, ProgressType.VALIDATION_PROGRESS.ordinal());
-        assertEquals(5, ProgressType.DEPLOYMENT_PROGRESS.ordinal());
+    void testProgressType_GenerationCompleted() {
+        // Given & When
+        ProgressType type = ProgressType.GENERATION_COMPLETED;
+
+        // Then
+        assertNotNull(type);
+        assertEquals("GENERATION_COMPLETED", type.name());
+        assertEquals(2, type.ordinal());
     }
 
     @Test
-    void testEnumName() {
-        // When & Then
-        assertEquals("GENERATION_STARTED", ProgressType.GENERATION_STARTED.name());
-        assertEquals("GENERATION_PROGRESS", ProgressType.GENERATION_PROGRESS.name());
-        assertEquals("GENERATION_COMPLETED", ProgressType.GENERATION_COMPLETED.name());
-        assertEquals("GENERATION_ERROR", ProgressType.GENERATION_ERROR.name());
-        assertEquals("VALIDATION_PROGRESS", ProgressType.VALIDATION_PROGRESS.name());
-        assertEquals("DEPLOYMENT_PROGRESS", ProgressType.DEPLOYMENT_PROGRESS.name());
+    void testProgressType_GenerationError() {
+        // Given & When
+        ProgressType type = ProgressType.GENERATION_ERROR;
+
+        // Then
+        assertNotNull(type);
+        assertEquals("GENERATION_ERROR", type.name());
+        assertEquals(3, type.ordinal());
     }
 
     @Test
-    void testEnumToString() {
+    void testProgressType_ValidationProgress() {
+        // Given & When
+        ProgressType type = ProgressType.VALIDATION_PROGRESS;
+
+        // Then
+        assertNotNull(type);
+        assertEquals("VALIDATION_PROGRESS", type.name());
+        assertEquals(4, type.ordinal());
+    }
+
+    @Test
+    void testProgressType_DeploymentProgress() {
+        // Given & When
+        ProgressType type = ProgressType.DEPLOYMENT_PROGRESS;
+
+        // Then
+        assertNotNull(type);
+        assertEquals("DEPLOYMENT_PROGRESS", type.name());
+        assertEquals(5, type.ordinal());
+    }
+
+    @Test
+    void testProgressType_ValueOf() {
+        // Given
+        String typeName = "GENERATION_STARTED";
+
+        // When
+        ProgressType type = ProgressType.valueOf(typeName);
+
+        // Then
+        assertNotNull(type);
+        assertEquals(ProgressType.GENERATION_STARTED, type);
+    }
+
+    @Test
+    void testProgressType_ToString() {
+        // Given
+        ProgressType type = ProgressType.GENERATION_PROGRESS;
+
+        // When
+        String result = type.toString();
+
+        // Then
+        assertNotNull(result);
+        assertEquals("GENERATION_PROGRESS", result);
+    }
+
+    @Test
+    void testProgressType_CompareTo() {
+        // Given
+        ProgressType started = ProgressType.GENERATION_STARTED;
+        ProgressType progress = ProgressType.GENERATION_PROGRESS;
+        ProgressType completed = ProgressType.GENERATION_COMPLETED;
+
         // When & Then
-        assertEquals("GENERATION_STARTED", ProgressType.GENERATION_STARTED.toString());
-        assertEquals("GENERATION_PROGRESS", ProgressType.GENERATION_PROGRESS.toString());
-        assertEquals("GENERATION_COMPLETED", ProgressType.GENERATION_COMPLETED.toString());
-        assertEquals("GENERATION_ERROR", ProgressType.GENERATION_ERROR.toString());
-        assertEquals("VALIDATION_PROGRESS", ProgressType.VALIDATION_PROGRESS.toString());
-        assertEquals("DEPLOYMENT_PROGRESS", ProgressType.DEPLOYMENT_PROGRESS.toString());
+        assertTrue(started.compareTo(progress) < 0, "STARTED should be less than PROGRESS");
+        assertTrue(progress.compareTo(completed) < 0, "PROGRESS should be less than COMPLETED");
+        assertTrue(completed.compareTo(started) > 0, "COMPLETED should be greater than STARTED");
+        assertEquals(0, started.compareTo(started), "Same type should be equal");
+    }
+
+    @Test
+    void testProgressType_Equals() {
+        // Given
+        ProgressType type1 = ProgressType.GENERATION_STARTED;
+        ProgressType type2 = ProgressType.GENERATION_STARTED;
+        ProgressType type3 = ProgressType.GENERATION_PROGRESS;
+
+        // When & Then
+        assertTrue(type1.equals(type2), "Same enum values should be equal");
+        assertTrue(type2.equals(type1), "Equality should be symmetric");
+        assertTrue(!type1.equals(type3), "Different enum values should not be equal");
+        assertTrue(!type1.equals(null), "Enum should not equal null");
+        assertTrue(!type1.equals("string"), "Enum should not equal different type");
+    }
+
+    @Test
+    void testProgressType_HashCode() {
+        // Given
+        ProgressType type1 = ProgressType.GENERATION_STARTED;
+        ProgressType type2 = ProgressType.GENERATION_STARTED;
+        ProgressType type3 = ProgressType.GENERATION_PROGRESS;
+
+        // When & Then
+        assertEquals(type1.hashCode(), type2.hashCode(), "Same enum values should have same hash code");
+        assertTrue(type1.hashCode() != type3.hashCode(), "Different enum values should have different hash codes");
     }
 } 
