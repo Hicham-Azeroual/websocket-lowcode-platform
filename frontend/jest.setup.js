@@ -1,0 +1,1 @@
+globalThis.global = globalThis; // Mock `global` to map to `window` for sockjs-client
