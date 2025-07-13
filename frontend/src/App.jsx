@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ProgressTracker } from "./components/ProgressTracker";
+import { GlobalNotifications } from "./components/GlobalNotifications";
 
 const App = () => {
   const [userId, setUserId] = useState("user123");
@@ -79,6 +80,7 @@ const App = () => {
       {status && <div className="mb-4 text-sm text-blue-700">{status}</div>}
       <ProgressTracker userId={userId} operationId={operationId} />
       <ToastContainer />
+      <GlobalNotifications></GlobalNotifications>
     </div>
   );
 };

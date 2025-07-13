@@ -1,0 +1,99 @@
+.progressTracker {
+  background: #111111;
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 32px 0 #000a;
+  padding: 2rem 2.5rem 2rem 2.5rem;
+  max-width: 540px;
+  margin: 2rem auto;
+  font-family: "JetBrains Mono", "Fira Mono", "Menlo", "Consolas", monospace;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.spinner {
+  width: 1.2em;
+  height: 1.2em;
+  border: 3px solid #333;
+  border-top: 3px solid #ff9800;
+  border-radius: 50%;
+  margin-right: 0.8em;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 8px #ff980088;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.generatingText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #ff9800;
+  text-shadow: 0 0 8px #ff980044;
+}
+
+.codeBlock {
+  background: #181818;
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 12px 0 #000a;
+  overflow-x: visible;
+}
+
+.pre {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  font-family: inherit;
+  background: none;
+  color: inherit;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.key {
+  color: #ff9800;
+}
+.string {
+  color: #fff;
+}
+.number {
+  color: #ffb74d;
+}
+.boolean {
+  color: #ff9800;
+  font-weight: bold;
+}
+.comment {
+  color: #bdbdbd;
+  font-style: italic;
+}
+
+.clearBtn {
+  background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6em 1.5em;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 8px 0 #0004;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.clearBtn:hover {
+  background: linear-gradient(90deg, #1d4ed8 0%, #0ea5e9 100%);
+  box-shadow: 0 4px 16px 0 #0006;
+}

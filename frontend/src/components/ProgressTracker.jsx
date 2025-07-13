@@ -1,130 +1,74 @@
 import React from "react";
 import { toast } from "react-toastify";
 import { useWebSocket } from "../hooks/useWebSocket";
-// Component to display private and public progress updates
-export const ProgressTracker = ({ userId, operationId }) => {
-  const { isConnected, progressUpdates, clearProgressUpdates } =
-    useWebSocket(userId);
+import styles from "./ProgressTracker.module.css";
 
-  // Filter private updates for the current user and operation
-  const privateUpdates = progressUpdates.filter(
-    (update) =>
-      !update.isPublic &&
-      update.userId === userId &&
-      update.operationId === operationId
+export const ProgressTracker = ({ userId, operationId }) => {
+  const { privateUpdates } = useWebSocket(userId);
+
+  // Filter private updates for the current operation
+  const operationUpdates = privateUpdates.filter(
+    (update) => update.operationId === operationId
   );
 
-  // Filter public updates
-  const publicUpdates = progressUpdates.filter((update) => update.isPublic);
+  // Get the latest private update for this operation
+  const latestUpdate = operationUpdates[operationUpdates.length - 1];
 
-  // Show toast notifications for private updates
+  // Always call hooks at the top level!
   React.useEffect(() => {
-    const latestPrivateUpdate = privateUpdates[privateUpdates.length - 1];
-    if (latestPrivateUpdate) {
-      if (latestPrivateUpdate.type === "GENERATION_COMPLETED") {
-        toast.success(latestPrivateUpdate.message);
-      } else if (latestPrivateUpdate.type === "GENERATION_ERROR") {
-        toast.error(latestPrivateUpdate.message);
+    if (latestUpdate) {
+      if (latestUpdate.type === "GENERATION_COMPLETED") {
+        toast.success(latestUpdate.message);
+      } else if (latestUpdate.type === "GENERATION_ERROR") {
+        toast.error(latestUpdate.message);
       }
     }
-  }, [privateUpdates]);
+  }, [latestUpdate]);
 
-  // Determine progress bar color
-  const getProgressColor = (type) => {
-    switch (type) {
-      case "GENERATION_COMPLETED":
-        return "bg-green-500";
-      case "GENERATION_ERROR":
-        return "bg-red-500";
-      case "GENERATION_PROGRESS":
-      case "GENERATION_STARTED":
-        return "bg-blue-500";
-      default:
-        return "bg-blue-500";
-    }
+  // Only show the tracker if there is at least one private update for this operation
+  // AND the operation is not completed or errored
+  if (
+    !latestUpdate ||
+    latestUpdate.type === "GENERATION_COMPLETED" ||
+    latestUpdate.type === "GENERATION_ERROR"
+  ) {
+    return null;
+  }
+
+  // Header text: show 'Generating: <step>' if available, else just 'Generating...'
+  const headerText = latestUpdate.step
+    ? `Generating: ${latestUpdate.step}`
+    : "Generating...";
+
+  // Format JSON with syntax highlighting, omitting isPublic
+  const formatJson = (obj) => {
+    if (!obj) return null;
+    // Omit isPublic from the object (do not assign to a variable to avoid linter warning)
+    const { isPublic: _omit, ...rest } = obj;
+    const json = JSON.stringify(rest, null, 2);
+    // Simple syntax highlighting
+    return json
+      .replace(/("[^"]+": )/g, `<span class='${styles.key}'>$1</span>`) // keys
+      .replace(/: ("[^"]*")/g, `: <span class='${styles.string}'>$1</span>`) // string values
+      .replace(/: (\d+)/g, `: <span class='${styles.number}'>$1</span>`) // numbers
+      .replace(
+        /: (true|false)/g,
+        `: <span class='${styles.boolean}'>$1</span>`
+      ); // booleans
   };
 
   return (
-    <div className="progress-tracker p-4 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-lg font-bold mb-4">Progress Tracker</h2>
-      {/* Connection status */}
-      <div className="connection-status mb-4">
-        {isConnected ? (
-          <span className="text-green-600 font-semibold">Connected</span>
-        ) : (
-          <span className="text-red-600 font-semibold">Disconnected</span>
-        )}
+    <div className={styles.progressTracker}>
+      <div className={styles.header}>
+        <span className={styles.spinner}></span>
+        <span className={styles.generatingText}>{headerText}</span>
       </div>
-      {/* Private updates */}
-      <div className="private-updates mb-4">
-        <h3 className="text-md font-semibold mb-2">
-          Private Updates for {userId}
-        </h3>
-        {privateUpdates.length === 0 ? (
-          <p>No private updates available</p>
-        ) : (
-          privateUpdates.map((update, index) => (
-            <div key={index} className="mb-2 p-2 bg-white rounded shadow">
-              <div className="progress-bar w-full bg-gray-200 rounded-full h-4 mb-2">
-                <div
-                  className={`h-4 rounded-full ${getProgressColor(
-                    update.type
-                  )}`}
-                  style={{ width: `${update.percentage || 0}%` }}
-                ></div>
-              </div>
-              <p>
-                <strong>Operation:</strong> {update.operationId}
-              </p>
-              <p>
-                <strong>Step:</strong> {update.step}
-              </p>
-              <p>
-                <strong>Message:</strong> {update.message}
-              </p>
-              <p>
-                <strong>Progress:</strong> {update.percentage || 0}%
-              </p>
-              <p>
-                <strong>Time:</strong>{" "}
-                {new Date(update.timestamp).toLocaleTimeString()}
-              </p>
-            </div>
-          ))
-        )}
+      <div className={styles.codeBlock}>
+        <pre
+          className={styles.pre}
+          dangerouslySetInnerHTML={{ __html: formatJson(latestUpdate) }}
+        />
       </div>
-      {/* Public updates */}
-      <div className="public-updates">
-        <h3 className="text-md font-semibold mb-2">Public System Updates</h3>
-        {publicUpdates.length === 0 ? (
-          <p>No public updates available</p>
-        ) : (
-          publicUpdates.map((update, index) => (
-            <div key={index} className="mb-2 p-2 bg-white rounded shadow">
-              <p>
-                <strong>User:</strong> {update.userId}
-              </p>
-              <p>
-                <strong>Operation:</strong> {update.operationId}
-              </p>
-              <p>
-                <strong>Message:</strong> {update.message}
-              </p>
-              <p>
-                <strong>Time:</strong>{" "}
-                {new Date(update.timestamp).toLocaleTimeString()}
-              </p>
-            </div>
-          ))
-        )}
-      </div>
-      {/* Clear updates button */}
-      <button
-        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        onClick={clearProgressUpdates}
-      >
-        Clear Updates
-      </button>
     </div>
   );
 };

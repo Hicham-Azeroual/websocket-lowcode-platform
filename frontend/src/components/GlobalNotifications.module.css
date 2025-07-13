@@ -1,0 +1,64 @@
+.globalNotifications {
+  background: #111111;
+  color: #fff;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem auto;
+  max-width: 540px;
+  box-shadow: 0 2px 12px 0 #000a;
+}
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.header {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: #ff9800;
+  letter-spacing: 0.01em;
+}
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #222;
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  position: relative;
+}
+.time {
+  color: #ff9800;
+  font-size: 0.95em;
+}
+.message {
+  color: #fff;
+  flex: 1;
+}
+.closeBtn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.3em;
+  font-weight: bold;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px 0 #0003;
+}
+.closeBtn:hover {
+  background: linear-gradient(90deg, #ff9800 0%, #ffb74d 100%);
+  color: #111;
+  box-shadow: 0 2px 8px 0 #ff980044;
+}

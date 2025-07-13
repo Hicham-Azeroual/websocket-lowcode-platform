@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
+import { useEffect, useState, useRef } from "react";
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
 
 // Custom hook for WebSocket connection
 export const useWebSocket = (userId) => {
@@ -10,7 +10,7 @@ export const useWebSocket = (userId) => {
 
   useEffect(() => {
     // Connect to backend WebSocket endpoint
-    const socket = new SockJS('http://localhost:8080/ws');
+    const socket = new SockJS("http://localhost:8080/ws");
     const client = new Client({
       webSocketFactory: () => socket,
       reconnectDelay: 5000, // Reconnect after 5 seconds
@@ -26,18 +26,18 @@ export const useWebSocket = (userId) => {
       client.subscribe(`/topic/progress.${userId}`, (message) => {
         const update = JSON.parse(message.body);
         console.log(update);
-        
+
         setProgressUpdates((prev) => [...prev, { ...update, isPublic: false }]);
       });
 
       // Subscribe to public system-wide updates
-      client.subscribe('/topic/system', (message) => {
+      client.subscribe("/topic/system", (message) => {
         const update = JSON.parse(message.body);
         setProgressUpdates((prev) => [...prev, { ...update, isPublic: true }]);
       });
 
       // Send subscription message with userId
-      client.publish({ destination: '/app/subscribe', body: userId });
+      client.publish({ destination: "/app/subscribe", body: userId });
     };
 
     client.onDisconnect = () => {
@@ -45,7 +45,7 @@ export const useWebSocket = (userId) => {
     };
 
     client.onStompError = (frame) => {
-      console.error('STOMP error:', frame);
+      console.error("STOMP error:", frame);
       setIsConnected(false);
     };
 
@@ -63,5 +63,18 @@ export const useWebSocket = (userId) => {
     setProgressUpdates([]);
   };
 
-  return { isConnected, progressUpdates, clearProgressUpdates };
+  // Separate arrays for private and public updates
+  const privateUpdates = progressUpdates.filter(
+    (update) => !update.isPublic && update.userId === userId
+  );
+  const publicUpdates = progressUpdates.filter((update) => update.isPublic);
+
+  return {
+    isConnected,
+    privateUpdates,
+    publicUpdates,
+    // Optionally still return progressUpdates and clearProgressUpdates if needed elsewhere
+    progressUpdates,
+    clearProgressUpdates,
+  };
 };
